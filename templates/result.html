@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wallpaper Ready</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Flowbite -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+</head>
+<body class="text-white text-[1.375rem] md:text-[1.44rem] leading-relaxed bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen flex flex-col items-center justify-center px-5 mb-24">
+
+
+  <div class="max-w-3xl w-full text-center mt-16">
+    <h1 class="text-[28px] md:text-5xl font-bold text-green-400 mb-2"> Your Wallpaper is Ready!</h1>
+    <p class="text-gray-300 mb-10 text-base md:text-lg"> Download and share your custom Spotify wallpaper. </p>
+    
+
+<!-- Wallpapers Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+  {% for file in filenames %}
+    <div class="bg-gray-900 rounded-2xl shadow-lg p-6 relative overflow-visible">
+      <img src="{{ url_for('static', filename='output/' + file) }}" alt="Generated Wallpaper"
+           class="rounded-lg shadow-md mb-6 max-h-[80vh] w-full object-cover">
+           <form action="{{ url_for('download') }}" method="POST" class="w-full download-form">
+            <input type="hidden" name="filename" value="{{ file }}">
+            <button type="submit"
+                    class="download-btn w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-lg 
+                           hover:bg-green-600 transition text-lg 
+                           transition-transform duration-150 active:scale-95 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5 text-white download-icon" fill="none" stroke="currentColor" stroke-width="2"
+                   viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+              </svg>
+              <span class="download-text">Download</span>
+            </button>
+          </form>    
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Retry & New Buttons Side by Side -->
+<div class="flex flex-col md:flex-row justify-center gap-6 mt-12 w-full max-w-md mx-auto">
+
+  <!-- New Styles (Retry same song) -->
+  <form method="POST" class="flex-1">
+    <input type="hidden" name="link" value="{{ link }}">
+    <button type="submit"
+        class="w-full px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg 
+               transition text-lg flex items-center justify-center gap-2 
+               transition-transform duration-150 active:scale-95">
+               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 4v6h6M20 20v-6h-6M4 10a9 9 0 0115.1-5.9M20 14a9 9 0 01-15.1 5.9" />
+          </svg>
+      New Styles
+    </button>
+  </form>
+
+  <!-- New Song (Reset form) -->
+  <form action="{{ url_for('index') }}" method="GET" class="flex-1">
+    <button type="submit"
+        class="w-full px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg 
+               transition text-lg flex items-center justify-center gap-2 
+               transition-transform duration-150 active:scale-95">
+               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 4v16m8-8H4" />
+          </svg>
+      New Song
+    </button>
+  </form>
+
+</div>
+
+</div>
+
+<script>
+  document.querySelectorAll(".download-form").forEach(form => {
+    form.addEventListener("submit", (e) => {
+      const btn = form.querySelector(".download-btn");
+      const text = btn.querySelector(".download-text");
+      const icon = btn.querySelector(".download-icon");
+
+      // Change to success state
+      text.textContent = "Downloaded";
+      icon.outerHTML = `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 13l4 4L19 7" />
+                        </svg>`;
+      btn.disabled = true;
+      btn.classList.add("opacity-60", "cursor-not-allowed");
+
+      // Revert after 3 seconds
+      setTimeout(() => {
+        text.textContent = "Download";
+        btn.disabled = false;
+        btn.classList.remove("opacity-60", "cursor-not-allowed");
+
+        btn.querySelector("svg").outerHTML = `<svg class="w-5 h-5 text-white download-icon" fill="none" stroke="currentColor" stroke-width="2"
+                           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+                        </svg>`;
+      }, 3000);
+    });
+  });
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+</html>
