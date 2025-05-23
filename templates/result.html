@@ -4,31 +4,54 @@
   <meta charset="UTF-8">
   <title>Wallpaper Ready</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Flowbite -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
 </head>
-<body class="text-white text-[1.375rem] md:text-[1.44rem] leading-relaxed bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen flex flex-col items-center justify-center px-5 mb-24">
 
+<body class="text-white leading-relaxed bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen flex flex-col">
 
-  <div class="max-w-3xl w-full text-center mt-16">
-    <h1 class="text-[28px] md:text-5xl font-bold text-green-400 mb-2"> Your Wallpaper is Ready!</h1>
-    <p class="text-gray-300 mb-10 text-base md:text-lg"> Download and share your custom Spotify wallpaper. </p>
-    
+<!-- ✨ NAVBAR -->
+<nav class="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-md text-white shadow-md py-3 px-6 flex items-center justify-between">
+  <div class="flex items-center space-x-2">
+    <img src="{{ url_for('static', filename='favicon.png') }}" alt="Logo" class="h-10 w-auto">
+    <a href="{{ url_for('index') }}" class="text-3xl font-semibold text-white hover:text-blue-400">Wallify</a>
+  </div>
+  <div class="hidden md:flex space-x-8 text-lg">
+    <a href="#" class="text-gray-300 hover:text-white">About</a>
+    <a href="#" class="text-gray-300 hover:text-white">Contact</a>
+  </div>
+</nav>
 
-<!-- Wallpapers Grid -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
-  {% for file in filenames %}
-    <div class="bg-gray-900 rounded-2xl shadow-lg p-6 relative overflow-visible">
-      <img src="{{ url_for('static', filename='output/' + file) }}" alt="Generated Wallpaper"
-           class="rounded-lg shadow-md mb-6 max-h-[80vh] w-full object-cover">
-           <form action="{{ url_for('download') }}" method="POST" class="w-full download-form">
+<!-- ✨ MAIN CONTENT -->
+<main class="flex-1 py-12 px-5 flex items-center justify-center">
+  <div class="max-w-4xl w-full">
+
+    <!-- Header -->
+    <div class="text-center mb-12 px-4">
+      <h1 class="text-4xl md:text-[2.9rem] font-extrabold text-blue-400 leading-tight">Your Wallpaper is Ready!</h1>
+      <p class="text-gray-300 mt-3 text-base md:text-lg">Download and share your custom Spotify wallpaper.</p>
+    </div>
+
+    <!-- Wallpapers Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+      {% for file in filenames %}
+        <div class="bg-gray-900/80 rounded-2xl shadow-lg p-6 backdrop-blur-sm">
+          <img src="{{ url_for('static', filename='output/' + file) }}" alt="Generated Wallpaper"
+               class="rounded-lg shadow-md mb-6 max-h-[80vh] w-full object-cover">
+
+          <form action="{{ url_for('download') }}" method="POST" class="download-form">
             <input type="hidden" name="filename" value="{{ file }}">
+            <input type="hidden" name="session" value="{{ session_id }}">
+
             <button type="submit"
-                    class="download-btn w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-lg 
-                           hover:bg-green-600 transition text-lg 
-                           transition-transform duration-150 active:scale-95 flex items-center justify-center gap-2">
+                    class="download-btn w-full px-6 py-3 bg-blue-500 hover:bg-blue-600
+                           text-white font-semibold rounded-lg transition text-lg flex items-center
+                           justify-center gap-2">
               <svg class="w-5 h-5 text-white download-icon" fill="none" stroke="currentColor" stroke-width="2"
                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -36,49 +59,45 @@
               </svg>
               <span class="download-text">Download</span>
             </button>
-          </form>    
+          </form>
+        </div>
+      {% endfor %}
     </div>
-  {% endfor %}
-</div>
 
-<!-- Retry & New Buttons Side by Side -->
-<div class="flex flex-col md:flex-row justify-center gap-6 mt-12 w-full max-w-md mx-auto">
-
-  <!-- New Styles (Retry same song) -->
-  <form method="POST" class="flex-1">
-    <input type="hidden" name="link" value="{{ link }}">
-    <button type="submit"
-        class="w-full px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg 
-               transition text-lg flex items-center justify-center gap-2 
-               transition-transform duration-150 active:scale-95">
-               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+    <!-- Action Buttons -->
+    <div class="flex flex-col md:flex-row justify-center gap-6 mt-12 w-full max-w-md mx-auto">
+      <!-- Retry -->
+      <form method="POST" class="flex-1">
+        <input type="hidden" name="link" value="{{ link }}">
+        <button type="submit"
+                class="w-full px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg
+                       transition text-lg flex items-center justify-center gap-2 active:scale-95">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M4 4v6h6M20 20v-6h-6M4 10a9 9 0 0115.1-5.9M20 14a9 9 0 01-15.1 5.9" />
           </svg>
-      New Styles
-    </button>
-  </form>
+          New Styles
+        </button>
+      </form>
 
-  <!-- New Song (Reset form) -->
-  <form action="{{ url_for('index') }}" method="GET" class="flex-1">
-    <button type="submit"
-        class="w-full px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg 
-               transition text-lg flex items-center justify-center gap-2 
-               transition-transform duration-150 active:scale-95">
-               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+      <!-- New Song -->
+      <form action="{{ url_for('index') }}" method="GET" class="flex-1">
+        <button type="submit"
+                class="w-full px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg
+                       transition text-lg flex items-center justify-center gap-2 active:scale-95">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 4v16m8-8H4" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
           </svg>
-      New Song
-    </button>
-  </form>
+          New Song
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
 
-</div>
-
-</div>
-
+<!-- Download Feedback JS -->
 <script>
   document.querySelectorAll(".download-form").forEach(form => {
     form.addEventListener("submit", (e) => {
@@ -86,17 +105,14 @@
       const text = btn.querySelector(".download-text");
       const icon = btn.querySelector(".download-icon");
 
-      // Change to success state
       text.textContent = "Downloaded";
       icon.outerHTML = `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M5 13l4 4L19 7" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>`;
       btn.disabled = true;
       btn.classList.add("opacity-60", "cursor-not-allowed");
 
-      // Revert after 3 seconds
       setTimeout(() => {
         text.textContent = "Download";
         btn.disabled = false;
@@ -112,6 +128,6 @@
   });
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 </body>
 </html>

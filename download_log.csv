@@ -1,19 +1,25 @@
-filename,timestamp,ip,user_agent
-c042e6953a4c4077a6b76a3ded21319e_2.jpg,2025-05-21T12:21:44.256855,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-c042e6953a4c4077a6b76a3ded21319e_2.jpg,2025-05-21T12:21:52.300578,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-c042e6953a4c4077a6b76a3ded21319e_1.jpg,2025-05-21T12:23:13.600792,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-c042e6953a4c4077a6b76a3ded21319e_1.jpg,2025-05-21T12:23:16.114120,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-c042e6953a4c4077a6b76a3ded21319e_2.jpg,2025-05-21T12:23:19.576904,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-c042e6953a4c4077a6b76a3ded21319e_3.jpg,2025-05-21T12:23:21.779445,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-b03fc0a0b08b48b585df882f27f2435d_1.jpg,2025-05-21T12:50:04.040409,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-bd54191ed90a4b9dbfcabd1b8a48e014_2.jpg,2025-05-21T13:48:45.434443,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-5ecfd6abe37c468387b106c3ad546f4c_2.jpg,2025-05-21T14:02:27.568977,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-5ecfd6abe37c468387b106c3ad546f4c_2.jpg,2025-05-21T14:02:39.751541,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-5ecfd6abe37c468387b106c3ad546f4c_2.jpg,2025-05-21T14:03:17.758807,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-6a1aeaa6e1b640c98327591f2397cbcf_2.jpg,2025-05-21T14:03:24.999236,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-6a1aeaa6e1b640c98327591f2397cbcf_2.jpg,2025-05-21T14:03:29.400726,192.168.1.41,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
-6bdaf7bd12e94a8c8d8212b3620be927_3.jpg,2025-05-21T14:06:08.185254,192.168.1.40,"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36"
-6bdaf7bd12e94a8c8d8212b3620be927_3.jpg,2025-05-21T14:06:12.827169,192.168.1.40,"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36"
-6bdaf7bd12e94a8c8d8212b3620be927_3.jpg,2025-05-21T14:06:15.929701,192.168.1.40,"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36"
-a257d499d3d1463a83026bf533f9ff08_3.jpg,2025-05-21T14:26:27.090223,192.168.1.40,"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36"
-2286926808304dc691ee49b3b34f17be_3.jpg,2025-05-21T14:29:28.834305,192.168.1.40,"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36"
+filename,song_id,mode,c1,c2,hue,brightness,warmth,session
+It_Only_Takes_One_Night_1_44a49c.jpg,1TM0ipSTznWDTBn6F1Ovqg,linear,#975b31,#692c24,40,0.71,neutral,f418352f-0856-4cd4-a707-e8ea90055b55
+It_Only_Takes_One_Night_2_21675d.jpg,1TM0ipSTznWDTBn6F1Ovqg,linear,#975b31,#cbc7bd,40,0.71,neutral,e4153d82-3ddd-46fa-8e39-ae0ec8ab8842
+It_Only_Takes_One_Night_3_b7f56a.jpg,1TM0ipSTznWDTBn6F1Ovqg,dual-radial,#692c24,#ad996f,40,0.71,neutral,1eec7c89-2177-44b9-b42a-ce8691ed9eb3
+It_Only_Takes_One_Night_1_f16be0.jpg,1TM0ipSTznWDTBn6F1Ovqg,linear,#ad996f,#221815,40,0.71,neutral,f3a25d7c-e079-4b09-bc27-6c5495e86442
+It_Only_Takes_One_Night_3_b72530.jpg,1TM0ipSTznWDTBn6F1Ovqg,dual-radial,#cbc7bd,#692c24,40,0.71,neutral,08c6fbad-fe1c-4931-8e98-d82fdb909a38
+Maharani_1_b24ee0.jpg,7unLxuzKpxbjASww1qi4br,shape-blur,#682d1c,#a40504,0,0.64,warm,2b764414-f1a7-48d7-9dda-a59f701822d5
+Maharani_3_5ddae7.jpg,7unLxuzKpxbjASww1qi4br,radial,#a40504,#d8c9a8,0,0.64,warm,f34b0a2c-e9a6-4073-b42a-9584f0a0a91a
+Stereo_Hearts_feat_Adam_Levine_3_e08cb0.jpg,0qOnSQQF0yzuPWsXrQ9paz,linear,#74af94,#9c8494,88,0.84,neutral,5d12cef5-b6f2-45c2-a581-b8a60d25ca1c
+Stereo_Hearts_feat_Adam_Levine_1_9553e6.jpg,0qOnSQQF0yzuPWsXrQ9paz,dual-radial,#74af94,#9c8494,88,0.84,neutral,5d12cef5-b6f2-45c2-a581-b8a60d25ca1c
+Ranam_Title_Track_1_e0d82c.jpg,55Zp6xvOvNwIB8nno2AhEz,linear,#5f5a9f,#8c3342,322,0.23,warm,c8183aed-8405-40e0-b191-f1608f8a3f77
+Something_About_You_3_40b497.jpg,6RiiSy9GzSwiyDEJDiMuKe,dual-radial,#5b2690,#d3cce0,259,0.87,neutral,9cb465d8-aa99-452d-93fb-2f918cffe6df
+Something_About_You_1_5934ae.jpg,6RiiSy9GzSwiyDEJDiMuKe,linear,#d3cce0,#727393,259,0.87,neutral,9d65bd32-3f9d-43d8-973b-cf8d1dbec15d
+Something_About_You_1_6bf722.jpg,6RiiSy9GzSwiyDEJDiMuKe,shape-blur,#5b2690,#90d591,259,0.87,neutral,29d110b4-4a61-4c39-b52a-0ecd51e72a8f
+It_Only_Takes_One_Night_1_a3d67a.jpg,1TM0ipSTznWDTBn6F1Ovqg,shape-blur,#ad996f,#221815,40,0.71,neutral,c3edbae6-6b62-4c36-8378-7b3031fd0120
+Kyoumen_no_Nami_Houseki_no_Kun_1_d97b86.jpg,1Xhy1gBPc2441AMBp8ztgY,linear,#aa6a4c,#3e2040,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Kyoumen_no_Nami_Houseki_no_Kun_3_38f719.jpg,1Xhy1gBPc2441AMBp8ztgY,shape-blur,#a33143,#519198,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Kyoumen_no_Nami_Houseki_no_Kun_2_a146e2.jpg,1Xhy1gBPc2441AMBp8ztgY,shape-blur,#e3b4b0,#3e2040,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Kyoumen_no_Nami_Houseki_no_Kun_1_d97b86.jpg,1Xhy1gBPc2441AMBp8ztgY,linear,#aa6a4c,#3e2040,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Kyoumen_no_Nami_Houseki_no_Kun_2_a146e2.jpg,1Xhy1gBPc2441AMBp8ztgY,shape-blur,#e3b4b0,#3e2040,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Kyoumen_no_Nami_Houseki_no_Kun_3_38f719.jpg,1Xhy1gBPc2441AMBp8ztgY,shape-blur,#a33143,#519198,5,0.89,warm,901a4ac0-9023-4d04-9e89-9c6c20fc84a4
+Stereo_Hearts_feat_Adam_Levine_1_941058.jpg,0qOnSQQF0yzuPWsXrQ9paz,linear,#bfd5a4,#9c8494,88,0.84,neutral,e3b624d7-0a52-4042-9fca-4234d5ecf605
+Stereo_Hearts_feat_Adam_Levine_1_ed9d1a.jpg,0qOnSQQF0yzuPWsXrQ9paz,linear,#bfd5a4,#74af94,88,0.84,neutral,6fb056bf-e61d-4140-b3ae-1c7c61c5a7f3
+Stereo_Hearts_feat_Adam_Levine_1_ed9d1a.jpg,0qOnSQQF0yzuPWsXrQ9paz,linear,#bfd5a4,#74af94,88,0.84,neutral,6fb056bf-e61d-4140-b3ae-1c7c61c5a7f3
+Stereo_Hearts_feat_Adam_Levine_2_e72d47.jpg,0qOnSQQF0yzuPWsXrQ9paz,shape-blur,#426ba3,#6c796d,88,0.84,neutral,6fb056bf-e61d-4140-b3ae-1c7c61c5a7f3
