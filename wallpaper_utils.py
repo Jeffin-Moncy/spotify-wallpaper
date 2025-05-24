@@ -29,8 +29,6 @@ def clean_old_wallpapers(folder="static/output", ttl_min=60):
         if fp.stat().st_mtime < limit:
             fp.unlink(missing_ok=True)
 
-
-
 def nice_filename(title: str, variant: int) -> str:
     base = re.sub(r'\W+', '_', title)[:30]           # sanitize + trim
     tag  = uuid.uuid4().hex[:6]
@@ -77,28 +75,28 @@ def generate_wallpaper(meta, base_name="wallpaper", session_id=None):
     """
     Creates three wallpaper variations and returns a list of filenames.
     Logs every variant to all_log.csv with chosen = 0.
+
+    meta = {
+        "title":   str,
+        "artist":  str,
+        "cover_url": str,
+        "song_id": str
+    }
     """
-    # ---- CONSTANTS --------------------------------------------------------
+    # ── CONSTANTS ──────────────────────────────────────────────────────────
     CANVAS     = (1080, 2400)
     OUTPUT_DIR = Path("static/output")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ---- Session ID -------------------------------------------------------
+    # ── Session ID ────────────────────────────────────────────────────────
     if session_id is None:
-        session_id = str(uuid.uuid4())
+        session_id = uuid.uuid4().hex
 
-    # ---- 1. Album art -----------------------------------------------------
+    # ── 1. Album art (download once) ──────────────────────────────────────
     art_bytes = requests.get(meta["cover_url"]).content
     art_orig  = Image.open(io.BytesIO(art_bytes)).convert("RGBA")
 
-    # ---- 2. Spotify code --------------------------------------------------
-    code_img = None
-    try:
-        code_img = download_image(meta["code_url"])
-    except Exception:
-        pass
-
-    # ---- 3. Overlays & fonts ---------------------------------------------
+    # ── 2. Overlays & fonts ───────────────────────────────────────────────
     controls = strip_black(Image.open(CONTROLS_PATH).convert("RGBA"))
     try:
         font_title  = ImageFont.truetype(str(FONT_PATH), 50)
@@ -106,48 +104,41 @@ def generate_wallpaper(meta, base_name="wallpaper", session_id=None):
     except OSError:
         font_title = font_artist = ImageFont.load_default()
 
-    # ---- 4. Gradient combos ----------------------------------------------
+    # ── 3. Gradient combos ────────────────────────────────────────────────
     palette   = extract_palette(art_bytes)
     dominant  = ColorThief(io.BytesIO(art_bytes)).get_color(quality=1)
     features  = extract_color_features(dominant)
     combos    = pick_gradient_combos(palette, features)[:3]   # only 3 variants
 
-    saved_files   = []
-    all_log_path  = Path("all_log.csv")
+    saved_files  = []
+    all_log_path = Path("all_log.csv")
 
     for idx, (c1, c2, mode) in enumerate(combos, start=1):
         # (a) Gradient background
         bg = make_gradient(CANVAS, c1, c2, mode)
 
-        # (b) Spotify code
-        if code_img:
-            code_w = int(CANVAS[0] * 0.75)
-            code   = code_img.resize((code_w, int(code_w * code_img.height / code_img.width)), Image.LANCZOS)
-            bg.paste(code, ((CANVAS[0] - code_w) // 2, 300), code)
-
-        # (c) Album art
+        # (b) Album art
         art_w     = int(CANVAS[0] * 0.76)
         album_top = 950
-        art = art_orig.resize((art_w, art_w), Image.LANCZOS).convert("RGBA")
+        art = art_orig.resize((art_w, art_w), Image.LANCZOS)
         bg.paste(art, ((CANVAS[0] - art_w) // 2, album_top), art)
 
-
-        # (d) Controls overlay
+        # (c) Controls overlay
         bg.alpha_composite(controls.resize(CANVAS, Image.LANCZOS))
 
-        # (e) Text
+        # (d) Text
         draw  = ImageDraw.Draw(bg)
         pad_x = 160
-        draw.text((pad_x, 1890),      meta["title"],  font=font_title,  fill="white")
-        draw.text((pad_x, 1950),      meta["artist"], font=font_artist, fill=(255,255,255,200))
+        draw.text((pad_x, 1890), meta["title"],  font=font_title,  fill="white")
+        draw.text((pad_x, 1950), meta["artist"], font=font_artist, fill=(255,255,255,200))
 
-        # (f) Save
-        filename  = nice_filename(meta["title"], idx) 
+        # (e) Save
+        filename  = nice_filename(meta["title"], idx)
         full_path = OUTPUT_DIR / filename
-        bg.convert("RGB").save(full_path, format="JPEG", quality=92)
+        bg.convert("RGB").save(full_path, "JPEG", quality=92)
         saved_files.append(filename)
 
-        # (g) Log to all_log.csv
+        # (f) Log
         log_row = {
             "filename":   filename,
             "song_id":    meta["song_id"],
@@ -161,10 +152,10 @@ def generate_wallpaper(meta, base_name="wallpaper", session_id=None):
             "session":    session_id
         }
 
-        file_exists = all_log_path.exists()
-        with open("all_log.csv", "a", newline="") as f:
+        with open(all_log_path, "a", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=log_row.keys())
             if f.tell() == 0:
                 writer.writeheader()
             writer.writerow(log_row)
+
     return saved_files

@@ -28,7 +28,7 @@ def filter_colors(palette):
 
 # Generate 3 color pairs and gradient modes from a palette
 def pick_gradient_combos(palette, features):
-    modes = ["linear", "radial", "diagonal", "dual-radial", "shape-blur"]
+    modes = ["linear", "radial", "diagonal", "dual-radial", "shape-blur", "diamond-blur"]
     combos = []
 
     for _ in range(3):
@@ -59,6 +59,9 @@ def extract_color_features(rgb):
 
 # Create a gradient image (linear or radial) between two colors
 def make_gradient(size, c1, c2, mode="linear"):
+    import numpy as np
+    from PIL import Image
+
     W, H = size
     base = Image.new("RGB", size, c1)
     top = Image.new("RGB", size, c2)
@@ -70,27 +73,34 @@ def make_gradient(size, c1, c2, mode="linear"):
         mask = Image.linear_gradient("L").rotate(45, expand=True).crop((0, 0, W, H))
 
     elif mode == "dual-radial":
-        mask = Image.new("L", size)
+        # Optimized with NumPy
         cx1, cy1 = int(W * 0.3), int(H * 0.3)
         cx2, cy2 = int(W * 0.7), int(H * 0.7)
-        rx, ry = np.ogrid[:H, :W]
-        dist1 = ((rx - cy1)**2 + (ry - cx1)**2)**0.5
-        dist2 = ((rx - cy2)**2 + (ry - cx2)**2)**0.5
-        dist = np.minimum(dist1, dist2)
-        dist = (dist / dist.max() * 255).astype("uint8")
-        mask.putdata(dist.flatten())
+        yy, xx = np.ogrid[:H, :W]
+        dist1 = np.sqrt((yy - cy1) ** 2 + (xx - cx1) ** 2)
+        dist2 = np.sqrt((yy - cy2) ** 2 + (xx - cx2) ** 2)
+        mask_array = np.minimum(dist1, dist2)
+        mask_array = (mask_array / mask_array.max() * 255).astype(np.uint8)
+        mask = Image.fromarray(mask_array, mode="L")
 
     elif mode == "shape-blur":
-    # concentric diamond blur - fades from centre-diamond to edges
-        mask = Image.new("L", size)
+        # Optimized shape blur using NumPy: Manhattan distance (diamond)
         cx, cy = W // 2, H // 2
-        for y in range(H):
-            for x in range(W):
-                d = abs(x - cx) + abs(y - cy)          # Manhattan distance ⇒ diamond
-                mask.putpixel((x, y), int(d / (cx + cy) * 255))
+        yy, xx = np.ogrid[:H, :W]
+        dist = np.abs(xx - cx) + np.abs(yy - cy)
+        mask_array = (dist / dist.max() * 255).astype(np.uint8)
+        mask = Image.fromarray(mask_array, mode="L")
 
+    elif mode == "diamond-blur":
+        # New effect: diamond gradient, vertical + horizontal combined
+        cx, cy = W // 2, H // 2
+        yy, xx = np.ogrid[:H, :W]
+        dist = np.maximum(np.abs(xx - cx), np.abs(yy - cy))  # like square waves
+        mask_array = (dist / dist.max() * 255).astype(np.uint8)
+        mask = Image.fromarray(mask_array, mode="L")
 
     else:
+        # Default to simple vertical linear gradient
         mask = Image.linear_gradient("L").resize(size)
 
     return Image.composite(top, base, mask).convert("RGBA")

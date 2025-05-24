@@ -3,6 +3,7 @@ import os, csv, uuid, shutil
 from datetime import datetime
 from spotify_utils import get_spotify_metadata
 from wallpaper_utils import generate_wallpaper, clean_old_wallpapers
+from cache_utils import get_cached_metadata, save_to_cache
 from pathlib import Path
 
 # Initialize Flask app
@@ -21,10 +22,15 @@ def index():
     if request.method == "POST":
         link = request.form.get("link")
         if link:
-            data = get_spotify_metadata(link)
+            from cache_utils import get_cached_metadata, save_to_cache
+
+            data = get_cached_metadata(link)
             if not data:
-                flash("Couldn't fetch data. Check the link and try again.", "error")
-                return redirect(url_for("index"))
+                data = get_spotify_metadata(link)
+                if not data:
+                    flash("Couldn't fetch data. Check the link and try again.", "error")
+                    return redirect(url_for("index"))
+                save_to_cache(link, data)
 
             session_id = str(uuid.uuid4())
             base_name  = uuid.uuid4().hex
@@ -32,7 +38,6 @@ def index():
             return render_template("result.html", filenames=filenames, link=link, session_id=session_id)
 
     return render_template("index.html")
-
 
 # === ROUTE: Serve individual wallpaper images ===
 @app.route("/output/<filename>")
