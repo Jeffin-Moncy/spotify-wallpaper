@@ -1,14 +1,19 @@
-from flask import Flask, render_template, request, send_from_directory, redirect, url_for, flash, send_file
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for, flash, send_file, session, abort
 import os, csv, uuid, shutil
 from datetime import datetime
 from spotify_utils import get_spotify_metadata
 from wallpaper_utils import generate_wallpaper, clean_old_wallpapers
 from cache_utils import get_cached_metadata, save_to_cache
 from pathlib import Path
+import pandas as pd
+import glob
+from dotenv import load_dotenv
 
 # Initialize Flask app
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = "super-secret"
+app.secret_key = os.getenv("SECRET_KEY")
+ADMIN_PASSCODE = os.getenv("ADMIN_PASSCODE")
 
 # Output directory
 OUTPUT_DIR = "static/output"
@@ -38,6 +43,23 @@ def index():
             return render_template("result.html", filenames=filenames, link=link, session_id=session_id)
 
     return render_template("index.html")
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        if request.form.get('passcode') == ADMIN_PASSCODE:
+            session['admin'] = True
+            return redirect('/admin/stats')
+        else:
+            return render_template('login.html', error="Wrong passcode")
+    return render_template('login.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin', None)
+    return redirect('/admin/login')
+
+
 
 # === ROUTE: Serve individual wallpaper images ===
 @app.route("/output/<filename>")
@@ -99,6 +121,58 @@ def download():                    # keep cleanup trigger
         print(f"[WARN] could not copy to downloads folder: {e}")
     # --- Send file to user --------------------------------------------------
     return send_file(src, as_attachment=True)
+
+@app.route('/admin/stats')
+def admin_stats():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+
+    try:
+        all_log_df = pd.read_csv('all_log.csv')
+    except FileNotFoundError:
+        all_log_df = pd.DataFrame(columns=["No data"])
+
+    try:
+        download_df = pd.read_csv('download_log.csv')
+    except FileNotFoundError:
+        download_df = pd.DataFrame(columns=["No data"])
+
+    # Fix variable name mismatch
+    outputs = get_image_list('output')       # folder: static/output/
+    downloads = get_image_list('downloads')  # folder: static/downloads/
+
+    return render_template(
+        'admin_stats.html',
+        all_log=all_log_df.to_dict(orient='records'),
+        all_log_columns=all_log_df.columns,
+        download=download_df.to_dict(orient='records'),
+        download_columns=download_df.columns,
+        outputs=outputs,
+        downloads=downloads
+    )
+
+@app.route('/admin/download/<filename>')
+def download_file(filename):
+    allowed_files = ['all_log.csv', 'download_log.csv']
+    if filename not in allowed_files:
+        return abort(404)
+    return send_file(filename, as_attachment=True)
+
+def get_image_list(folder):
+    path = os.path.join('static', folder)
+    extensions = ('*.png', '*.jpg', '*.jpeg', '*.webp', '*.gif')
+    
+    files = []
+    for ext in extensions:
+        files.extend(glob.glob(os.path.join(path, ext)))
+
+    # Sort files by modified time, newest first
+    files.sort(key=os.path.getmtime, reverse=True)
+
+    # Convert to URL paths
+    files = [f"/{file.replace(os.sep, '/')}" for file in files]
+    return files
+
 
 # === APP RUN ===
 if __name__ == "__main__":

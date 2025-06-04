@@ -11,6 +11,15 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
   <!-- Favicon -->
   <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon" />
+
+  <style>
+    .bmc-fixed {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    </style>
 </head>
 
 <body class="text-white leading-relaxed bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen flex flex-col">
@@ -94,6 +103,19 @@
         </button>
       </form>
     </div>
+        <!-- Footer -->
+        <footer class="mt-10 text-center text-gray-500 text-lg">
+          Made by <a style="color: white;" href="https://www.linkedin.com/in/jeffin-moncy-b40ba930b/">Jeffin</a>&nbsp;&nbsp;(● ◡ ●)
+
+          <div style="display: flex; justify-content: center; padding: 20px;">
+            <a href="https://coff.ee/Jeffin_Moncy" target="_blank">
+              <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
+                   alt="Buy Me A Coffee" 
+                   style="height: 45px; width: 162px;" >
+            </a>
+          </div>
+
+        </footer>
   </div>
 </main>
 

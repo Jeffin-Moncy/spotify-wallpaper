@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>  
+  
+</head>
+<body class="bg-gray-100 p-6">     
+  <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-md p-6">
+    <a href="/admin/logout" class="text-sm text-blue-600 hover:underline ml-4">Logout</a> 
+    <div class="flex justify-end mb-4">
+        <button id="darkToggle" class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 dark:text-white rounded">
+          Toggle Dark Mode
+        </button>
+      </div>
+    <h1 class="text-2xl font-bold mb-4">📊 Admin Dashboard</h1>
+
+    <!-- Tabs -->
+    <div class="mb-4 border-b border-gray-200">
+      <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="stats-tabs" data-tabs-toggle="#stats-tab-content" role="tablist">
+        <li class="mr-2">
+          <button class="inline-block p-4 border-b-2 rounded-t-lg" id="all-log-tab" data-tabs-target="#all-log" type="button" role="tab" aria-controls="all-log" aria-selected="true">All Log</button>
+        </li>
+        <li class="mr-2">
+          <button class="inline-block p-4 border-b-2 rounded-t-lg" id="download-tab" data-tabs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Downloads</button>
+        </li>
+        <li class="mr-2">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="outputs-tab" data-tabs-target="#outputs" type="button" role="tab">Current Wallpapers</button>
+        </li>
+        <li class="mr-2">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="downloads-tab" data-tabs-target="#downloads" type="button" role="tab">Downloaded Wallpapers</button>
+        </li>
+          
+      </ul>
+    </div>
+
+    <div id="stats-tab-content">
+      <!-- All Log Tab -->
+      <div class="hidden p-4 rounded-lg bg-gray-50" id="all-log" role="tabpanel" aria-labelledby="all-log-tab">
+        <div class="flex justify-end mb-2">
+          <a href="/admin/download/all_log.csv" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Download CSV</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm text-left text-gray-700 border border-gray-200">
+            <thead class="bg-gray-200 text-xs text-gray-700 uppercase">
+              <tr>
+                {% for col in all_log_columns %}
+                <th scope="col" class="px-2 py-1 text-xs border">{{ col }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in all_log %}
+              <tr class="bg-white border-b hover:bg-gray-100">
+                {% for col in all_log_columns %}
+                <td class="px-2 py-1 text-xs border">{{ row[col] }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <!-- Pagination controls (same for both tables, tweak IDs if needed) -->
+          <div class="flex flex-col items-center mt-4">
+            <div class="text-sm mb-1" id="table0-indicator">Page 1</div>
+            <div>
+              <button id="table0-prev" onclick="updatePagination(document.querySelectorAll('tbody')[0], -1, 'table0')" class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50">Prev</button>
+              <button id="table0-next" onclick="updatePagination(document.querySelectorAll('tbody')[0], 1, 'table0')" class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50">Next</button>
+            </div>
+          </div>
+          
+
+        </div>
+      </div>
+
+      <!-- Download Tab -->
+      <div class="hidden p-4 rounded-lg bg-gray-50" id="download" role="tabpanel" aria-labelledby="download-tab">
+        <div class="flex justify-end mb-2">
+          <a href="/admin/download/download_log.csv" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Download CSV</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm text-left text-gray-700 border border-gray-200">
+            <thead class="bg-gray-200 text-xs text-gray-700 uppercase">
+              <tr>
+                {% for col in download_columns %}
+                <th scope="col" class="px-2 py-1 text-xs border">{{ col }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in download %}
+              <tr class="bg-white border-b hover:bg-gray-100">
+                {% for col in download_columns %}
+                <td class="px-2 py-1 text-xs border">{{ row[col] }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <!-- Pagination controls (same for both tables, tweak IDs if needed) -->
+          <div class="flex flex-col items-center mt-4">
+            <div class="text-sm mb-1" id="table0-indicator">Page 1</div>
+            <div>
+              <button id="table0-prev" onclick="updatePagination(document.querySelectorAll('tbody')[0], -1, 'table0')" class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50">Prev</button>
+              <button id="table0-next" onclick="updatePagination(document.querySelectorAll('tbody')[0], 1, 'table0')" class="px-3 py-1 mx-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50">Next</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- Current Wallpapers Gallery -->
+<div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {% for img in outputs %}
+      <a href="{{ img }}" class="glightbox" data-gallery="outputs">
+        <img src="{{ img }}" class="w-full max-w-[200px] h-auto rounded shadow" alt="Wallpaper">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Downloaded Wallpapers Gallery -->
+  <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="downloads" role="tabpanel" aria-labelledby="downloads-tab">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-auto">
+      {% for img in downloads %}
+      <a href="{{ img }}" class="glightbox" data-gallery="downloads">
+        <img src="{{ img }}" class="w-full max-w-[200px] h-auto rounded shadow" alt="Wallpaper">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+  const lightbox = GLightbox({ selector: '.glightbox' });
+</script>
+<script>
+    document.getElementById('darkToggle').addEventListener('click', function () {
+      document.documentElement.classList.toggle('dark');
+    });
+  </script>
+ <script>
+  const rowsPerPage = 30;
+  const paginations = {}; // tableId -> currentPage
+
+  function updatePagination(tbody, direction, tableId) {
+    const rows = tbody.querySelectorAll("tr");
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    if (!(tableId in paginations)) {
+      paginations[tableId] = 1;
+    }
+
+    paginations[tableId] = Math.min(Math.max(1, paginations[tableId] + direction), totalPages);
+
+    // Show/hide rows
+    rows.forEach((row, index) => {
+      const start = (paginations[tableId] - 1) * rowsPerPage;
+      const end = paginations[tableId] * rowsPerPage;
+      row.style.display = (index >= start && index < end) ? '' : 'none';
+    });
+
+    // Update indicator
+    const indicator = document.getElementById(`${tableId}-indicator`);
+    if (indicator) indicator.textContent = `Page ${paginations[tableId]} of ${totalPages}`;
+
+    // Enable/disable buttons
+    const prevBtn = document.getElementById(`${tableId}-prev`);
+    const nextBtn = document.getElementById(`${tableId}-next`);
+    if (prevBtn) prevBtn.disabled = paginations[tableId] === 1;
+    if (nextBtn) nextBtn.disabled = paginations[tableId] === totalPages;
+  }
+
+  function initPagination() {
+    document.querySelectorAll("tbody").forEach((tbody, index) => {
+      const tableId = `table${index}`;
+      updatePagination(tbody, 0, tableId); // Initialize to page 1
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initPagination);
+</script>
+
+  
+</body>
+</html>
