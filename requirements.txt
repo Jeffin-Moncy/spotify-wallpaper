@@ -17,14 +17,17 @@ MarkupSafe==3.0.2
 matplotlib==3.10.3
 numpy==2.2.6
 packaging==25.0
+pandas==2.2.3
 pillow==11.2.1
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
+pytz==2025.2
 redis==6.1.0
 requests==2.32.3
 six==1.17.0
 spotipy==2.25.1
 tornado==6.5
+tzdata==2025.2
 urllib3==2.4.0
 Werkzeug==3.1.3
