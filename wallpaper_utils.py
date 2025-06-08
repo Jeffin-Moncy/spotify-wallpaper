@@ -1,21 +1,15 @@
 # wallpaper_utils.py
 
-import io, uuid, datetime, csv, os  
-import requests
+import io, uuid, requests, re
 import colorsys
 import random
 from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
 from colorthief import ColorThief
 from pathlib import Path
-from gradient_utils import extract_palette, pick_gradient_combos, make_gradient
-import time
-from gradient_utils import extract_color_features
-import uuid, re
-
+from gradient_utils import extract_palette, pick_gradient_combos, make_gradient, extract_color_features
 
 # ========== CONFIG ==========
 
-CANVAS = (1080, 2400)
 CONTROLS_PATH = Path("assets/ui/controls.png")
 FONT_PATH = Path("assets/fonts/CircularSpotifyText-Medium.otf") # Replace with Inter or Roboto if needed
 
@@ -111,7 +105,6 @@ def generate_wallpaper(meta, base_name="wallpaper", session_id=None):
     combos    = pick_gradient_combos(palette, features)[:3]   # only 3 variants
 
     saved_files  = []
-    all_log_path = Path("all_log.csv")
 
     for idx, (c1, c2, mode) in enumerate(combos, start=1):
         # (a) Gradient background
@@ -136,26 +129,8 @@ def generate_wallpaper(meta, base_name="wallpaper", session_id=None):
         filename  = nice_filename(meta["title"], idx)
         full_path = OUTPUT_DIR / filename
         bg.convert("RGB").save(full_path, "JPEG", quality=92)
+
         saved_files.append(filename)
 
-        # (f) Log
-        log_row = {
-            "filename":   filename,
-            "song_id":    meta["song_id"],
-            "mode":       mode,
-            "c1":         "#{:02x}{:02x}{:02x}".format(*c1),
-            "c2":         "#{:02x}{:02x}{:02x}".format(*c2),
-            "hue":        features["hue"],
-            "brightness": features["brightness"],
-            "warmth":     features["warmth"],
-            "chosen":     "0",
-            "session":    session_id
-        }
-
-        with open(all_log_path, "a", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=log_row.keys())
-            if f.tell() == 0:
-                writer.writeheader()
-            writer.writerow(log_row)
 
     return saved_files

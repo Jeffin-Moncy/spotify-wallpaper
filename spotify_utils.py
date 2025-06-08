@@ -17,7 +17,7 @@ auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=clien
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 def format_title(raw_title):
-    for symbol in ["(", "[", "{"]:
+    for symbol in ["(", "[", "{", "-"]:
         if symbol in raw_title:
             return raw_title.split(symbol)[0].strip()
     return raw_title.strip()
